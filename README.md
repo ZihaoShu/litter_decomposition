@@ -1,37 +1,19 @@
-# litter_decomposition
+# 互花米草凋落物分解研究
 
-#### 介绍
-一切安好，顺利毕业
+#### 项目介绍
+本项目为富营养化对互花米草凋落物碳归趋的影响及机制研究的所有数据处理。
 
-#### 软件架构
-这是一个测试文件
+#### 项目组成
+该项目文件主要由三部分组成
 
+- 原始数据
+<br>原始数据文件包括该项目所有的数据，以测定指标类型进行分类。
+- 脚本文件
+<br>包含所有的脚本处理文件，数据分析流程以及函数。
+- 结果输出 
+<br>输出类型主要有**图片**、**表格**以及**文档**。
 
-#### 安装教程
+---
+一切安好，一切顺利！
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+后续不断对项目内容进行补充，完善数据分析流程。
