@@ -6,7 +6,7 @@
 
 library(tidyverse)
 
-# 回归计算函数
+# 凋落物附着物回归拟合函数
 plot_use_model_func <- function(data,groupname,typename){
   data_summary <- function(data){
     require(plyr)
@@ -49,7 +49,8 @@ plot_use_model_func <- function(data,groupname,typename){
 
 # 2022/3/22第一次取样数据拟合
 litter_respiration_situ_first <- readxl::read_xlsx("data/raw/litter_respiration_situ_first.xlsx")
-first_data <- litter_respiration_situ_first[-c(16,17,20,31,32,40,116,208,216),] %>% 
+first_data <- litter_respiration_situ_first[-c(16,17,20,31,32,40,45,46,47,48,56,57,60, # 剔除异常值
+                                               116,174,175,176,208,216),] %>% 
   filter(CO2 != "NA")
 first_data$CO2 <- as.numeric(first_data$CO2)
 first_data$N2O <- as.numeric(first_data$N2O)
@@ -100,5 +101,79 @@ ggsave("output/plots/litter_respiration/first_NP2_leaf.png",
        plot_use_model_func(data = first_data,groupname = "NP2",typename = "leaf"),
        width = 15,height = 12,dpi = 300)
 
-## 呼吸速率计算及差异性检验
+## 呼吸速率计算
 
+respiration_func <- function(data){
+  CK_stem <- data %>% 
+    filter(Group == "CK",Type == "stem") %>% 
+    lm(formula = CO2 ~ Rank)
+  CK_respiration_stem <- as.numeric(format(coef(CK_stem)[1], digits = 4))
+  N1_stem <- data %>% 
+    filter(Group == "N1",Type == "stem") %>% 
+    lm(formula = CO2 ~ Rank)
+  N1_respiration_stem <- as.numeric(format(coef(N1_stem)[1], digits = 4))
+  N2_stem <- data %>% 
+    filter(Group == "N2",Type == "stem") %>% 
+    lm(formula = CO2 ~ Rank)
+  N2_respiration_stem <- as.numeric(format(coef(N2_stem)[1], digits = 4))
+  P1_stem <- data %>% 
+    filter(Group == "P1",Type == "stem") %>% 
+    lm(formula = CO2 ~ Rank)
+  P1_respiration_stem <- as.numeric(format(coef(P1_stem)[1], digits = 4))
+  P2_stem <- data %>% 
+    filter(Group == "P2",Type == "stem") %>% 
+    lm(formula = CO2 ~ Rank)
+  P2_respiration_stem <- as.numeric(format(coef(P2_stem)[1], digits = 4))
+  NP1_stem <- data %>% 
+    filter(Group == "NP1",Type == "stem") %>% 
+    lm(formula = CO2 ~ Rank)
+  NP1_respiration_stem <- as.numeric(format(coef(NP1_stem)[1], digits = 4))
+  NP2_stem <- data %>% 
+    filter(Group == "NP2",Type == "stem") %>% 
+    lm(formula = CO2 ~ Rank)
+  NP2_respiration_stem <- as.numeric(format(coef(NP2_stem)[1], digits = 4))
+  Group <- c("CK","N1","N2","P1","P2","NP1","NP2")
+  respiration_stem <- c(CK_respiration_stem,N1_respiration_stem,N2_respiration_stem,
+                        P1_respiration_stem,P2_respiration_stem,NP1_respiration_stem,
+                        NP2_respiration_stem)
+  CK_leaf <- data %>% 
+    filter(Group == "CK",Type == "leaf") %>% 
+    lm(formula = CO2 ~ Rank)
+  CK_respiration_leaf <- as.numeric(format(coef(CK_leaf)[1], digits = 4))
+  N1_leaf <- data %>% 
+    filter(Group == "N1",Type == "leaf") %>% 
+    lm(formula = CO2 ~ Rank)
+  N1_respiration_leaf <- as.numeric(format(coef(N1_leaf)[1], digits = 4))
+  N2_leaf <- data %>% 
+    filter(Group == "N2",Type == "leaf") %>% 
+    lm(formula = CO2 ~ Rank)
+  N2_respiration_leaf <- as.numeric(format(coef(N2_leaf)[1], digits = 4))
+  P1_leaf <- data %>% 
+    filter(Group == "P1",Type == "leaf") %>% 
+    lm(formula = CO2 ~ Rank)
+  P1_respiration_leaf <- as.numeric(format(coef(P1_leaf)[1], digits = 4))
+  P2_leaf <- data %>% 
+    filter(Group == "P2",Type == "leaf") %>% 
+    lm(formula = CO2 ~ Rank)
+  P2_respiration_leaf <- as.numeric(format(coef(P2_leaf)[1], digits = 4))
+  NP1_leaf <- data %>% 
+    filter(Group == "NP1",Type == "leaf") %>% 
+    lm(formula = CO2 ~ Rank)
+  NP1_respiration_leaf <- as.numeric(format(coef(NP1_leaf)[1], digits = 4))
+  NP2_leaf <- data %>% 
+    filter(Group == "NP2",Type == "leaf") %>% 
+    lm(formula = CO2 ~ Rank)
+  NP2_respiration_leaf <- as.numeric(format(coef(NP2_leaf)[1], digits = 4))
+  respiration_leaf <- c(CK_respiration_leaf,N1_respiration_leaf,N2_respiration_leaf,
+                        P1_respiration_leaf,P2_respiration_leaf,NP1_respiration_leaf,
+                        NP2_respiration_leaf)
+  df <- data.frame(Group = Group,
+                   respiration_stem = respiration_stem,
+                   respiration_leaf = respiration_leaf)
+  df
+}
+
+first_respiration_data <- respiration_func(first_data)
+write.csv(first_respiration_data,file = "output/analysis/litter_respiration/first_respiration_data.csv",row.names = FALSE)
+
+                                  
