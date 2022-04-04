@@ -1,0 +1,14 @@
+---
+title: "fisrt_litter_respiration"
+author: "shuzihao"
+date: "2022/4/4"
+institute: "南京师范大学环境学院"
+mianfont: Times New Roman
+fontsize: 10pt
+output: html_document
+---
+
+```{r, echo=FALSE}
+knitr::include_graphics("D:/shuzihao/litter_decomposition/output/plots/litter_respiration/first_CK_leaf.png")
+```
+
