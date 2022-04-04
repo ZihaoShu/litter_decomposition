@@ -55,7 +55,7 @@ first_data <- litter_respiration_situ_first[-c(16,17,20,31,32,40,45,46,47,48,56,
 first_data$CO2 <- as.numeric(first_data$CO2)
 first_data$N2O <- as.numeric(first_data$N2O)
 first_data$CH4 <- as.numeric(first_data$CH4)
-## 茎凋落物附着呼吸拟合
+## 茎凋落物CO2浓度随时间变化的线性回归斜率
 ggsave("output/plots/litter_respiration/first_CK_stem.png",
        plot_use_model_func(data = first_data,groupname = "CK",typename = "stem"),
        width = 15,height = 12,dpi = 300)
@@ -78,7 +78,7 @@ ggsave("output/plots/litter_respiration/first_NP2_stem.png",
        plot_use_model_func(data = first_data,groupname = "NP2",typename = "stem"),
        width = 15,height = 12,dpi = 300)
 
-## 叶凋落物附着物呼吸拟合
+## 叶凋落物CO2浓度随时间变化的线性回归斜率
 ggsave("output/plots/litter_respiration/first_CK_leaf.png",
        plot_use_model_func(data = first_data,groupname = "CK",typename = "leaf"),
        width = 15,height = 12,dpi = 300)
@@ -101,7 +101,7 @@ ggsave("output/plots/litter_respiration/first_NP2_leaf.png",
        plot_use_model_func(data = first_data,groupname = "NP2",typename = "leaf"),
        width = 15,height = 12,dpi = 300)
 
-## 呼吸速率计算
+## 凋落物CO2浓度随时间变化的线性回归斜率
 respiration_func <- function(data){
   data_stem <- filter(data,Type == "stem")
   CK_stem <- filter(data_stem,Group == "CK") %>% 
@@ -164,3 +164,10 @@ respiration_func <- function(data){
 first_respiration_data <- respiration_func(first_data)
 write.csv(first_respiration_data,file = "output/analysis/litter_respiration/first_respiration_data.csv",row.names = FALSE)
 
+## 凋落物CO2释放速率的计算
+CO2_func <- function(){
+  k <- C()
+  M <- C()
+  y <- (k*M*V*P*T_0)/(m*V_0*P_0*T)
+  y
+}
