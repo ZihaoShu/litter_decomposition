@@ -5,10 +5,12 @@ date: "2022/4/4"
 institute: "南京师范大学环境学院"
 mianfont: Times New Roman
 fontsize: 10pt
-output: pdf_document
+output: md_document
 ---
 
+
 ```{r, echo=FALSE}
-knitr::include_graphics("D:/shuzihao/litter_decomposition/output/plots/litter_respiration/first_CK_leaf.png")
+knitr::include_graphics("../../plots/litter_respiration/first_CK_leaf.png")
 ```
 
+![png]("../../plots/litter_respiration/first_CK_leaf.png")

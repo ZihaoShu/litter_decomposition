@@ -1,11 +1,3 @@
-fisrt_litter_respiration
-================
-shuzihao
-2022/4/4
+<img src="../../plots/litter_respiration/first_CK_leaf.png" width="4500" />
 
-    ## Warning in knitr::include_graphics("D:/shuzihao/litter_decomposition/output/
-    ## plots/litter_respiration/first_CK_leaf.png"): It is highly recommended
-    ## to use relative paths for images. You had absolute paths: "D:/shuzihao/
-    ## litter_decomposition/output/plots/litter_respiration/first_CK_leaf.png"
-
-![](D:/shuzihao/litter_decomposition/output/plots/litter_respiration/first_CK_leaf.png)<!-- -->
+![png](%22../../plots/litter_respiration/first_CK_leaf.png%22)
