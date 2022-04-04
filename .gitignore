@@ -3,4 +3,4 @@
 .RData
 .Ruserdata
 .data/
-.output/report/litter_respiration.Rmd
+.litter_respiration.Rmd
