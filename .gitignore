@@ -2,5 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-.data/
-.litter_respiration.Rmd
+/data
+output/report/*.Rmd
