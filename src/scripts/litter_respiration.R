@@ -29,17 +29,15 @@ plot_use_model_func <- function(data,groupname,typename){
     data_summary() %>% 
     filter(Group == groupname) %>% 
     ggplot(aes(x = Rank,y = CO2))+
-    geom_point(position = position_dodge(0.1),size = 3)+
+    geom_point(position = position_dodge(0.1),size = 6)+
     geom_errorbar(aes(ymin = CO2 - sd, ymax = CO2 + sd),
-                  width = 0.6, position = position_dodge(0.1),size = 0.6)+
+                  width = 1.2, position = position_dodge(0.1),size = 1.2)+
     geom_smooth(method = "lm",formula = y~x)+
-    geom_text(aes(x = 50, y = 500, label = as.character(as.expression(eq))), parse = TRUE,size = 6)+
+    geom_text(aes(x = 40, y = 400, label = as.character(as.expression(eq))), parse = TRUE,size = 10)+
     theme_classic()+
     theme(
-      legend.position = c(0.63,0.25),
-      axis.title = element_text(color = "black",size = 20),
-      axis.text = element_text(color = "black",size = 16),
-      strip.text = element_text(color = 'black', face = 'bold', size = 20)
+      axis.title = element_text(color = "black",size = 40),
+      axis.text = element_text(color = "black",size = 32)
     )+
     labs(x = "Time(min)",
          y = "CO2(ppm)",
@@ -165,9 +163,23 @@ first_respiration_data <- respiration_func(first_data)
 write.csv(first_respiration_data,file = "output/analysis/litter_respiration/first_respiration_data.csv",row.names = FALSE)
 
 ## 凋落物CO2释放速率的计算
-CO2_func <- function(){
-  k <- C()
-  M <- C()
-  y <- (k*M*V*P*T_0)/(m*V_0*P_0*T)
+a <- as.numeric(c(3,4,14,12,63,25,23,54,22,24))
+b <- as.numeric(c(2.4,2.5,3.1,2.6,3.2,2.7,2.5,2.4,2.8,1.5))
+t <- as.numeric(rep(25,10))
+
+
+CO2_evolution_func <- function(respiration,mass,temperature){
+  k <- respiration                    #CO2浓度随时间变化的线性回归斜率 ppm CO2/h
+  M <- 44                             #CO2的摩尔质量44g/mol
+  m <- mass                           #放入的凋落物质量(干重),g
+  T_0 <- 273.15                       #标准状态下的温度,K
+  T_1 <- T_0+temperature              #采样时的温度,K。输入的temperature单位为℃，这里加上T_O换算成K
+  V <- 0.5                            #气室的体积,L
+  V_0 <- 22.4                         #标准状况下CO2的摩尔体积,22.4L/mol
+  P <- 1.013                          #采样时的气压,kPa
+  P_0 <- 1.013                        #标准大气压1.013kPa
+  y <- (k*M*V*P*T_0)/(m*V_0*P_0*T_1)  #凋落物CO2释放速率的计算公式，μgCO2/(g·min)
   y
 }
+test2 <- CO2_evolution_func(respiration = a,mass = b,temperature = t)
+test2
