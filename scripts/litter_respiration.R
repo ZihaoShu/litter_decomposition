@@ -100,68 +100,20 @@ ggsave("output/plots/litter_respiration/first_NP2_leaf.png",
        width = 15,height = 12,dpi = 300)
 
 ## 凋落物CO2浓度随时间变化的线性回归斜率
-
-respiration_func <- function(data){
-  data_stem <- filter(data,Type == "stem")
-  CK_stem <- filter(data_stem,Group == "CK") %>% 
-    lm(formula = CO2 ~ Rank)
-  CK_respiration_stem <- as.numeric(format(coef(CK_stem)[2], digits = 4))
-  N1_stem <- filter(data_stem,Group == "N1") %>% 
-    lm(formula = CO2 ~ Rank)
-  N1_respiration_stem <- as.numeric(format(coef(N1_stem)[2], digits = 4))
-  N2_stem <- filter(data_stem,Group == "N2") %>% 
-    lm(formula = CO2 ~ Rank)
-  N2_respiration_stem <- as.numeric(format(coef(N2_stem)[2], digits = 4))
-  P1_stem <- filter(data_stem,Group == "P1") %>% 
-    lm(formula = CO2 ~ Rank)
-  P1_respiration_stem <- as.numeric(format(coef(P1_stem)[2], digits = 4))
-  P2_stem <- filter(data_stem,Group == "P2") %>% 
-    lm(formula = CO2 ~ Rank)
-  P2_respiration_stem <- as.numeric(format(coef(P2_stem)[2], digits = 4))
-  NP1_stem <- filter(data_stem,Group == "NP1") %>% 
-    lm(formula = CO2 ~ Rank)
-  NP1_respiration_stem <- as.numeric(format(coef(NP1_stem)[2], digits = 4))
-  NP2_stem <- filter(data_stem,Group == "NP2") %>% 
-    lm(formula = CO2 ~ Rank)
-  NP2_respiration_stem <- as.numeric(format(coef(NP2_stem)[2], digits = 4))
-  Group <- c("CK","N1","N2","P1","P2","NP1","NP2")
-  respiration_stem <- c(CK_respiration_stem,N1_respiration_stem,N2_respiration_stem,
-                        P1_respiration_stem,P2_respiration_stem,NP1_respiration_stem,
-                        NP2_respiration_stem)*60   #将CO2气体浓度随时间变化的单位从ppm/min转化为ppm/h
- 
-  data_leaf <- filter(data,Type == "leaf")
-  CK_leaf <- filter(data_leaf,Group == "CK") %>% 
-    lm(formula = CO2 ~ Rank)
-  CK_respiration_leaf <- as.numeric(format(coef(CK_leaf)[2], digits = 4))
-  N1_leaf <- filter(data_leaf,Group == "N1") %>% 
-    lm(formula = CO2 ~ Rank)
-  N1_respiration_leaf <- as.numeric(format(coef(N1_leaf)[2], digits = 4))
-  N2_leaf <- filter(data_leaf,Group == "N2") %>% 
-    lm(formula = CO2 ~ Rank)
-  N2_respiration_leaf <- as.numeric(format(coef(N2_leaf)[2], digits = 4))
-  P1_leaf <- filter(data_leaf,Group == "P1") %>% 
-    lm(formula = CO2 ~ Rank)
-  P1_respiration_leaf <- as.numeric(format(coef(P1_leaf)[2], digits = 4))
-  P2_leaf <- filter(data_leaf,Group == "P2") %>% 
-    lm(formula = CO2 ~ Rank)
-  P2_respiration_leaf <- as.numeric(format(coef(P2_leaf)[2], digits = 4))
-  NP1_leaf <- filter(data_leaf,Group == "NP1") %>% 
-    lm(formula = CO2 ~ Rank)
-  NP1_respiration_leaf <- as.numeric(format(coef(NP1_leaf)[2], digits = 4))
-  NP2_leaf <- filter(data_leaf,Group == "NP2") %>% 
-    lm(formula = CO2 ~ Rank)
-  NP2_respiration_leaf <- as.numeric(format(coef(NP2_leaf)[2], digits = 4))
-  respiration_leaf <- c(CK_respiration_leaf,N1_respiration_leaf,N2_respiration_leaf,
-                        P1_respiration_leaf,P2_respiration_leaf,NP1_respiration_leaf,
-                        NP2_respiration_leaf)*60  #将CO2气体浓度随时间变化的单位从ppm/min转化为ppm/h
-  df <- data.frame(Group = Group,
-                   stem = respiration_stem,
-                   leaf = respiration_leaf)
-  df
+first_respiration_calculation <- readxl::read_xlsx("data/temp/first_respiration_calculation.xlsx")
+first_output <- vector("list",14)
+for (i in 3:16) {
+  first_output[[i]] <- format(coef(lm(formula = first_respiration_calculation[[i]]~first_respiration_calculation[[2]]))[2], 
+                              digits = 4)
 }
-
-first_respiration_data <- respiration_func(first_data)
-write.csv(first_respiration_data,file = "output/analysis/litter_respiration/first_respiration_data.csv",row.names = FALSE)
+first_output <- dplyr::bind_rows(first_output)
+first_respiration_data <- tibble(
+  Group = c(rep(c("CK","N1","N2","P1","P2","NP1","NP2"),2)),
+  Type = c(rep("stem",7),rep("leaf",7)),
+  CO2_respiration = as.numeric(first_output[[1]])*60   #将CO2气体浓度随时间变化的单位从ppm/min转化为ppm/h
+)
+write.csv(first_respiration_data,file = "output/analysis/litter_respiration/first_respiration_data.csv",
+          row.names = FALSE)
 
 ## 凋落物CO2释放速率的计算
 
@@ -175,6 +127,9 @@ CO2_evolution_func <- function(respiration,mass,temperature){
   V_0 <- 22.4                         #标准状况下CO2的摩尔体积,22.4L/mol
   P <- 1.013                          #采样时的气压,kPa
   P_0 <- 1.013                        #标准大气压1.013kPa
-  y <- (k*M*V*P*T_0)/(m*V_0*P_0*T_1)  #凋落物CO2释放速率的计算公式，μgCO2/(g·min)
+  y <- (k*M*V*P*T_0)/(m*V_0*P_0*T_1)  #凋落物CO2释放速率的计算公式，μgCO2/(g·h)
   y
 }
+
+
+
