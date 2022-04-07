@@ -10,39 +10,32 @@
 
 
 library(tidyverse)
-library(ggpmisc)
+library(ggpmisc) #使用stat_poly_eq函数显示公式和R方
 
-
-first_data <- readxl::read_xlsx("data/raw/litter_respiration_situ_first.xlsx") %>% 
+# 读取数据室外凋落物附着物CO2排放通量数据
+# 剔除数据中的异常值，以及NA值，对数据框按照Group和Type分成列表
+litter_respiration <- readxl::read_xlsx("data/raw/litter_respiration.xlsx") %>% 
   slice(-c(16,17,20,31,32,40,45,46,47,48,56,57,60,116,174,175,176,208,216)) %>% 
   filter(CO2 != 0) %>% 
   select(Group,Rank,Type,CO2) %>%
   split(list(.$Group,.$Type))
 
-# 计算mean和sd的公式
-# data_summary <- function(data){
-  require(plyr)
-  summary_func <- function(x,col, na.rm = TRUE){
-    c(mean = mean(x[[col]]),
-      sd = sd(x[[col]], na.rm = TRUE))
-  }
-  data_sum <- ddply(data, "Rank", .fun = summary_func, "CO2")                                  
-  data_sum <- rename(data_sum, c("mean" = "CO2"))
-} 
-
-model_coef <- first_data %>% 
+# 对数据分别进行线性拟合，提取CO2释放速率，并输出数据
+model_coef <- litter_respiration %>% 
   map(~lm(CO2 ~ Rank,data = .)) %>% 
   map(summary) %>% 
   map_dbl(~.$coefficients[[2]])
 write.csv(model_coef,file = "output/analysis/litter_respiration/first_respiration_data.csv",
           row.names = TRUE)
 
+# 对列表中每个数据框进行绘图并拟合函数，显示公式、R方以及P值
+# 输出图片
 plots <- first_data %>% 
   map(~ggplot(.,aes(x = Rank,y = CO2))+
          geom_point(position = position_dodge(0.1),size = 6)+
          geom_smooth(method = "lm",formula = y ~ x,se = FALSE,color="red",size = 1.5)+
-         stat_poly_eq(aes(label = paste(..eq.label.., ..rr.label..,..p.value.label..,sep = "~~~")),
-                      formula = y~x,parse=T,size= 12)+
+         stat_poly_eq(aes(label = paste(..eq.label.., ..rr.label..,..p.value.label..,sep = "~~~")), 
+                      formula = y~x,parse=T,size= 12)+       #显示公式、R方以及P值
          theme_bw()+
          theme(
            axis.title = element_text(color = "black",size = 40),
@@ -53,27 +46,11 @@ plots <- first_data %>%
          labs(x = "Time(min)",
               y = "CO2(ppm)")) 
 paths <- stringr::str_c("D:/shuzihao/litter_decomposition/output/plots/litter_respiration/first_",
-                        names(plots),".png") #这里只能写绝对路径吗？
+                        names(plots),".png")  #这里只能写绝对路径吗？
 pwalk(list(paths,plots),ggsave,width = 15,height = 12,dpi = 300)
 
-## 凋落物CO2浓度随时间变化的线性回归斜率
-## first_respiration_calculation <- readxl::read_xlsx("data/temp/first_respiration_calculation.xlsx")
-## first_output <- vector("list",14)
-## for (i in 3:16) {
-##   first_output[[i]] <- format(coef(lm(formula = first_respiration_calculation[[i]]~first_respiration_calculation[[2]]))[2], 
-##                               digits = 4)
-## }
-## first_output <- dplyr::bind_rows(first_output)
-## first_respiration_data <- tibble(
-##   Group = c(rep(c("CK","N1","N2","P1","P2","NP1","NP2"),2)),
-##   Type = c(rep("stem",7),rep("leaf",7)),
-##   CO2_respiration = as.numeric(first_output[[1]])*60   #将CO2气体浓度随时间变化的单位从ppm/min转化为ppm/h
-## )
-## write.csv(first_respiration_data,file = "output/analysis/litter_respiration/first_respiration_data.csv",
-##           row.names = FALSE)
 
 ## 凋落物CO2释放速率的计算
-
 CO2_evolution_func <- function(respiration,mass,temperature){
   k <- respiration                    #CO2浓度随时间变化的线性回归斜率 ppm CO2/h
   M <- 44                             #CO2的摩尔质量44g/mol

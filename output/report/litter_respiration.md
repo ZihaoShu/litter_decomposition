@@ -38,38 +38,38 @@ $$
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">CK</td>
-<td style="text-align: center;">1366</td>
-<td style="text-align: center;">1098</td>
+<td style="text-align: center;">33.21</td>
+<td style="text-align: center;">44.03</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">N1</td>
-<td style="text-align: center;">1036</td>
-<td style="text-align: center;">974.8</td>
+<td style="text-align: center;">24.36</td>
+<td style="text-align: center;">41.96</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">N2</td>
-<td style="text-align: center;">753.2</td>
-<td style="text-align: center;">770.2</td>
+<td style="text-align: center;">20.15</td>
+<td style="text-align: center;">25.32</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">P1</td>
-<td style="text-align: center;">736.8</td>
-<td style="text-align: center;">780.2</td>
+<td style="text-align: center;">24.60</td>
+<td style="text-align: center;">30.01</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">P2</td>
-<td style="text-align: center;">665.8</td>
-<td style="text-align: center;">1205</td>
+<td style="text-align: center;">19.20</td>
+<td style="text-align: center;">42.85</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">NP1</td>
-<td style="text-align: center;">676.4</td>
-<td style="text-align: center;">952</td>
+<td style="text-align: center;">19.06</td>
+<td style="text-align: center;">36.24</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">NP2</td>
-<td style="text-align: center;">708.7</td>
-<td style="text-align: center;">877.7</td>
+<td style="text-align: center;">18.36</td>
+<td style="text-align: center;">44.85</td>
 </tr>
 </tbody>
 </table>
