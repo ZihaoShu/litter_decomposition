@@ -89,43 +89,43 @@ $$
 
 还需计算*C**O*<sub>2</sub>的释放速率
 
-<img src="../plots/litter_respiration/first_CK_leaf.png" width="50%" /><img src="../plots/litter_respiration/first_CK_stem.png" width="50%" />
+<img src="../plots/litter_respiration/first_CK.leaf.png" width="50%" /><img src="../plots/litter_respiration/first_CK.stem.png" width="50%" />
 
 <center>
 图1 CK处理下叶（左）和茎（右）凋落物附着物呼吸速率
 </center>
 
-<img src="../plots/litter_respiration/first_N1_leaf.png" width="50%" /><img src="../plots/litter_respiration/first_N1_stem.png" width="50%" />
+<img src="../plots/litter_respiration/first_N1.leaf.png" width="50%" /><img src="../plots/litter_respiration/first_N1.stem.png" width="50%" />
 
 <center>
 图2 N1处理下叶（左）和茎（右）凋落物附着物呼吸速率
 </center>
 
-<img src="../plots/litter_respiration/first_N2_leaf.png" width="50%" /><img src="../plots/litter_respiration/first_N2_stem.png" width="50%" />
+<img src="../plots/litter_respiration/first_N2.leaf.png" width="50%" /><img src="../plots/litter_respiration/first_N2.stem.png" width="50%" />
 
 <center>
 图3 N2处理下叶（左）和茎（右）凋落物附着物呼吸速率
 </center>
 
-<img src="../plots/litter_respiration/first_P1_leaf.png" width="50%" /><img src="../plots/litter_respiration/first_P1_stem.png" width="50%" />
+<img src="../plots/litter_respiration/first_P1.leaf.png" width="50%" /><img src="../plots/litter_respiration/first_P1.stem.png" width="50%" />
 
 <center>
 图4 P1处理下叶（左）和茎（右）凋落物附着物呼吸速率
 </center>
 
-<img src="../plots/litter_respiration/first_P2_leaf.png" width="50%" /><img src="../plots/litter_respiration/first_P2_stem.png" width="50%" />
+<img src="../plots/litter_respiration/first_P2.leaf.png" width="50%" /><img src="../plots/litter_respiration/first_P2.stem.png" width="50%" />
 
 <center>
 图5 P2处理下叶（左）和茎（右）凋落物附着物呼吸速率
 </center>
 
-<img src="../plots/litter_respiration/first_NP1_leaf.png" width="50%" /><img src="../plots/litter_respiration/first_NP1_stem.png" width="50%" />
+<img src="../plots/litter_respiration/first_NP1.leaf.png" width="50%" /><img src="../plots/litter_respiration/first_NP1.stem.png" width="50%" />
 
 <center>
 图6 NP1处理下叶（左）和茎（右）凋落物附着物呼吸速率
 </center>
 
-<img src="../plots/litter_respiration/first_NP2_leaf.png" width="50%" /><img src="../plots/litter_respiration/first_NP2_stem.png" width="50%" />
+<img src="../plots/litter_respiration/first_NP2.leaf.png" width="50%" /><img src="../plots/litter_respiration/first_NP2.stem.png" width="50%" />
 
 <center>
 图7 NP2处理下叶（左）和茎（右）凋落物附着物呼吸速率
