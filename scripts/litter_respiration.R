@@ -30,7 +30,7 @@ write.csv(model_coef,file = "output/analysis/litter_respiration/first_respiratio
 
 # 对列表中每个数据框进行绘图并拟合函数，显示公式、R方以及P值
 # 输出图片
-plots <- first_data %>% 
+plots <- litter_respiration %>% 
   map(~ggplot(.,aes(x = Rank,y = CO2))+
          geom_point(position = position_dodge(0.1),size = 6)+
          geom_smooth(method = "lm",formula = y ~ x,se = FALSE,color="red",size = 1.5)+
