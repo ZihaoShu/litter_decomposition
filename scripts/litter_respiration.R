@@ -28,6 +28,11 @@ model_coef <- litter_respiration %>%
   map(~lm(CO2 ~ Rank,data = .)) %>% 
   map(summary) %>% 
   map_dbl(~.$coefficients[[2]])
+name <- names(model_coef) %>% 
+    str_split_fixed("\\.",n = 3) #用正则表达式匹配"."将字符分隔开
+model_coef <- rbind(model_coef,name[,1],name[,2])
+rownames(model_coef) <- c("Coef","Group","Type")
+model_coef <- t(model_coef)
 write.csv(model_coef,file = "data/temp/litter_respiration/first_respiration_data.csv",
           row.names = TRUE)
 
@@ -52,10 +57,9 @@ paths <- stringr::str_c("D:/shuzihao/litter_decomposition/output/plots/litter_re
                         names(plots),".png")  #这里只能写绝对路径吗？
 pwalk(list(paths,plots),ggsave,width = 15,height = 12,dpi = 300)
 
-
+# 凋落物残余质量
 options(dplyr.summarise.inform = FALSE) #解决group_by分组之后summarise报错
 
-# 凋落物残余质量
 mass <- readxl::read_xlsx("data/raw/litter_mass.xlsx") %>% 
   filter(Decomposition_time != 0) %>% 
   select(Group,Type,Mass,Decomposition_time) %>% 
@@ -70,7 +74,7 @@ CO2_evolution <- read.csv("data/temp/litter_respiration/first_respiration_data.c
          left_join(mass,by = c("Type","Group")) %>% 
   mutate(Temperature = 18) %>% 
   rename(k = x,mass = mean) %>% 
-  mutate(CO2_evolutio = (k*44*0.5*1.013*273.15)/(mass*22.4*1.013*(273.15+Temperature)))
+  mutate(CO2_evolution = (k*44*0.5*1.013*273.15)/(mass*22.4*1.013*(273.15+Temperature)))
 write.csv(CO2_evolution,"output/analysis/litter_respiration/CO2_evolution.csv")
 
 CO2_evolution$Group <- factor(CO2_evolution$Group,levels = c("CK","N1","N2","P1","P2","NP1","NP2"))
