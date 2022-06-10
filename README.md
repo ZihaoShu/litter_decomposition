@@ -12,7 +12,7 @@
 按照实验类型对文件进行命名：
 - litter_respiration
 - litter_nutrients
-- litter_properties
+- litter_quality
 
 
 #### 项目组成
@@ -29,4 +29,4 @@
 ---
 一切安好，一切顺利！
 
-后续不断对项目内容进行补充，完善数据分析流程。# litter_decomposition
+后续不断对项目内容进行补充，完善数据分析流程。
