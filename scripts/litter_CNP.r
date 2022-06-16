@@ -13,6 +13,7 @@ litter_CNP <- readxl::read_xlsx("data/Insuit/litter_CNP.xlsx",col_names = TRUE) 
            Test = factor(Test),
            Group = factor(Group,level = c("CK","N1","N2","P1","P2","NP1","NP2")),
            Type = factor(Type))
+
 # 观察数据的分布情况，剔除异常值
 ## Carbon
 litter_C_plot <- ggplot(litter_CNP,aes(x = Parallel,y = Carbon))+
@@ -24,14 +25,6 @@ litter_C_plot <- ggplot(litter_CNP,aes(x = Parallel,y = Carbon))+
          y = "Carbon(mg/g)")
 ggsave("D:/shuzihao/litter_decomposition/output/Insuit/plots/Carbon_60_raw_data.png",
        litter_C_plot,width = 15,height = 12,dpi = 300)
-
-litter_carbon <- litter_CNP %>% 
-    slice(-c(16,23,26,28,45,47,62,68,74,77,78,79,87,93,95,97,98,101,106,110,161)) %>% 
-    split(list(.$Type))
-func_anova(litter_carbon[[1]],element = "Carbon")
-func_anova(litter_carbon[[2]],element = "Carbon")
-
-
 ## Nitrogen
 litter_N_plot <- ggplot(litter_CNP,aes(x = Parallel,y = Nitrogen))+
     geom_boxplot()+
@@ -42,17 +35,15 @@ litter_N_plot <- ggplot(litter_CNP,aes(x = Parallel,y = Nitrogen))+
          y = "Nitrogen(mg/g)")
 ggsave("D:/shuzihao/litter_decomposition/output/Insuit/plots/Nitrogen_60_raw_data.png",
        litter_N_plot,width = 15,height = 12,dpi = 300)
-litter_nitrogen <- litter_CNP %>%
-    split(list(.$Type))
-
-func_anova(litter_nitrogen[[1]],element = "Nitrogen")
-func_anova(litter_nitrogen[[2]],element = "Nitrogen")
-
 # 元素含量计算
-element_content <- litter_CNP %>% 
-    gather(value = "Value",key = "Element",Nitrogen,Carbon,Phosphorus) %>% 
-    group_by(Group,Type,Element,Decomposition_time) %>% 
-    summarise(Mean = mean(Value,na.rm = TRUE),
-              Sd = sd(Value,na.rm = TRUE)) %>% 
-    mutate(Element = factor(Element))
-write.csv(element_content,"output/Insuit/element_content.csv",row.names=FALSE)
+litter_CNP[c(16,23,26,28,32,33,45,47,51,53,58,62,68,74,77,78,79,87,93,94,95,97,98,101,106,110,161,173,174),8] <- NA
+litter_CNP[c(15,20,26,47,68,107,110,152),7] <- NA
+litter_CNP <- litter_CNP %>% 
+    gather(key = "element",value = "value",Nitrogen,Carbon,Phosphorus) %>%  
+    split(list(.$Type,.$element))
+output <- vector("list",6)
+for(i in 1:6){
+    output[[i]] <- func_anova(litter_CNP[[i]],Groupname = "Group",element = "element",value = "value",ignore = TRUE)
+}
+element_data <- rbind(output[[1]],output[[2]],output[[3]],output[[4]])
+write.csv(file = "output/Insuit/element_data.csv",element_data)

@@ -1,19 +1,22 @@
 # 舒子豪
 # 2022/06/09
-# 用于显著性检验并绘制柱状图
 # 在使用前请先运行source("func_anova.r",encoding = "utf-8")将该函数调入
-# 首先使用shapiro.test()函数对数据进行正态性检验，然后使用bartlett.test()函数检验数据方差齐性，
-# 最后数据在满足正态性及方差齐性的条件下进行显著性检验，并绘制柱状图
+# 使用shapiro.test()及bartlett.test()函数对数据的正态性及方差齐性进行检验
+# 满足正态性及方差齐性之后使用agricolae包中的HSD.test()函数对ano()计算结果进行汇总统计，
+# 默认是进行正态性及方差检验之后再进行显著性检验，考虑到样本量的问题加入ignore = TRUE参数,可直接进行显著性检验
+# 参数意义：data——导入数据,Groupname——分组变量,element——进行显著性分析的元素名称,value——进行显著性分析的观测数据
 
-func_anova <- function(data,element){
+func_anova <- function(data,Groupname,element,value,ignore = FALSE){
     source("scripts/func/theme_szh.r")
     require(agricolae)
     require(tidyverse)
-    names(data)[names(data) == element] = "value"
+    names(data)[names(data) == Groupname] = "Group"
+    names(data)[names(data) == value] = "value"
+    if(ignore == FALSE){
     shapiro = data %>% 
         group_by(Group) %>% 
         summarise(p_value = shapiro.test(value)[[2]]) %>%  #检验数据是否符合正态分布
-        mutate(score = (p_value-0.05)/abs(p_value-0.05))
+        mutate(score = (p_value-0.05)/abs(p_value-0.05)) #若得分为-1或NaN则为该组数据不符合
     if(sum(shapiro$score) != length(shapiro[[1]])){
         print("数据不符合正态性")
         shapiro
@@ -27,16 +30,30 @@ func_anova <- function(data,element){
         HSD$means$Group = rownames(HSD$means)
         HSD$groups$Group = rownames(HSD$groups)
         df = merge(HSD$means,HSD$groups[,-1],by = "Group")
-        df$Group = factor(df$Group,level = c("CK","N1","N2","P1","P2","NP1","NP2"))
         name = names(df[2])
-        p = ggplot(df,aes(x = Group,y = value))+
-        geom_col(fill = "gray")+
-        geom_errorbar(aes(ymin = value - std,ymax = value + std),position=position_dodge(.9),width = 0.2)+
-        geom_text(aes(label = groups, y = value + std),size = 6,vjust = -0.5) +
-        theme_szh()+
-        labs(x = " ",
-             y = paste0(name,"(mg/g)"))
-        p
+        df = df[,-c(7,8,9)]
+        Type = c(rep(data[1,]$Type,7))
+        df$Type = Type
+        Time = c(rep(data[1,]$Time,7))
+        df$Time  = Time
+        Element = c(rep(data[1,]$element,7))
+        df$Element  = Element
+        df
+        }
     }
-}
+    }else{
+        HSD = HSD.test(aov(value ~ Group,data),"Group")
+        HSD$means$Group = rownames(HSD$means)
+        HSD$groups$Group = rownames(HSD$groups)
+        df = merge(HSD$means,HSD$groups[,-1],by = "Group")
+        name = names(df[2])
+        df = df[,-c(7,8,9)]
+        Type = c(rep(data[1,]$Type,7))
+        df$Type = Type
+        Time = c(rep(data[1,]$Time,7))
+        df$Time  = Time
+        Element = c(rep(data[1,]$element,7))
+        df$Element  = Element
+        df
+    }
 }
