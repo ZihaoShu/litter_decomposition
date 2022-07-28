@@ -20,8 +20,7 @@ source("scripts/func/theme_szh.r")
 # 剔除数据中的异常值，以及NA值，对数据框按照Group和Type分成列表
 litter_respiration <- readxl::read_xlsx("data/Insuit/litter_respiration.xlsx") %>% 
   slice(-c(16,17,20,31,32,40,45,46,47,48,56,57,60,116,174,175,176,208,216)) %>% 
-  filter(CO2 != 0) %>% 
-  select(Group,Rank,Type,CO2) %>%
+  filter(CO2 != 0) %>%
   split(list(.$Group,.$Type))
 
 # 对数据分别进行线性拟合，提取CO2释放速率，并输出数据
@@ -34,6 +33,7 @@ name <- names(model_coef) %>%
 model_coef <- rbind(model_coef,name[,1],name[,2])
 rownames(model_coef) <- c("Coef","Group","Type")
 model_coef <- t(model_coef)
+model_coef
 write.csv(model_coef,file = "output/Insuit/first_respiration_data.csv",
           row.names = TRUE)
 
@@ -55,11 +55,14 @@ pwalk(list(paths,plots),ggsave,width = 15,height = 12,dpi = 300)
 # 凋落物残余质量
 options(dplyr.summarise.inform = FALSE) #解决group_by分组之后summarise报错
 
-mass <- readxl::read_xlsx("data/Insuit/litter_mass.xlsx") %>% 
-  filter(Decomposition_time != 0) %>% 
-  select(Group,Type,Mass,Decomposition_time) %>% 
-  group_by(Type, Group) %>% 
-  summarise(mean = mean(Mass))
+mass <- readxl::read_xlsx("data/Insuit/litter_mass.xlsx") %>%
+  split(list(.$Type,.$Time)) 
+mass[[1]]
+output <- vector("list",4)
+for(i in 1:4){
+  output[[i]] <- func_anova(mass[[i]],Groupname = "Group",value = "value",element = "element",ignore = TRUE)
+}
+mass_data <- rbind(output[[1]],output[[2]],output[[3]],output[[4]])
 
 # 凋落物CO2释放速率的计算
 CO2_evolution <- read.csv("output/Insuit/first_respiration_data.csv") %>% 

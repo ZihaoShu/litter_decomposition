@@ -7,11 +7,11 @@
 # 参数意义：data——导入数据,Groupname——分组变量,element——进行显著性分析的元素名称,value——进行显著性分析的观测数据
 
 func_anova <- function(data,Groupname,element,value,ignore = FALSE){
-    source("scripts/func/theme_szh.r")
     require(agricolae)
     require(tidyverse)
     names(data)[names(data) == Groupname] = "Group"
     names(data)[names(data) == value] = "value"
+    names(data)[names(data) == element] = "element"
     if(ignore == FALSE){
     shapiro = data %>% 
         group_by(Group) %>% 
